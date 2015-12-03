@@ -6,7 +6,8 @@ import time
 import sys
 import random
 from PIL import ImageFont
-from PIL import ImageDraw 
+from PIL import ImageDraw
+import os
 
 def terminalLine(string):
     sys.stdout.write(">")
@@ -28,6 +29,13 @@ def getmemeword():
         u"パソコンが最も大切なもの",
         u"自分自身を殺す",
         u"ください",
+        u"４２０ミームをブレーズ",
+        u"ＭＡＣプラス",
+        u"ミームを作ります。ドリームを壊しています",
+        u"ＶＡＰＯＲＷＡＶＥが生活です",
+        u"神様の思考を聞けます",
+        u"１９８ＸＡＤミーム",
+        u"像",
         ]
     return memewords[random.randint(0, len(memewords)-1)]
     
@@ -50,13 +58,23 @@ def drawMemeText(size, text, x, y, im):
     return im
     
 def addText(im):
-    for i in range(random.randint(5, 30)):
+    for i in range(random.randint(15, 30)):
         im = drawMemeText(random.randint(10, 100), getmemeword(),
-                     random.randint(0, im.size[0]), random.randint(0, im.size[1]-100),
+                     random.randint(0, im.size[0]), random.randint(0, im.size[1]),
                      im)
     return im
+
+def overlayImage(im, path):
+    foreground = Image.open(path)
+    foreground = foreground.convert('RGBA')
+    im.paste(foreground, (random.randint(0, im.size[0]), random.randint(0, im.size[1])), mask=foreground)
+    return im
                    
-                   
+def addImg(im):
+    for i in range(random.randint(4, 10)):
+        newImgPath = "img/" + os.listdir("img")[random.randint(0, len(os.listdir("img"))-1)]
+        im = overlayImage(im, newImgPath)
+    return im
 
 def vaporwaveImage(path):
     terminalLine(u"ミームマシンをイニシャライズする…")
@@ -69,6 +87,8 @@ def vaporwaveImage(path):
         for j in range(im.size[1]): # height
             curr = pixels[i, j]
             pixels[i, j] = addFilter(pixels[i, j])
+    terminalLine(u"ＶＡＰＯＲＷＡＶＥの画像する、待ってをください…")
+    im = addImg(im)
     terminalLine(u"今、ＶＡＰＯＲＷＡＶＥのミームの文章する。待ってをください…")
     im = addText(im)
     im.show()
