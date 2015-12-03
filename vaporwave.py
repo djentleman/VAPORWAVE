@@ -45,7 +45,7 @@ def getmemeword():
     return memewords[random.randint(0, len(memewords)-1)]
     
 
-def addFilter(pixel):
+def addFilter(pixel, r, g, b):
     arr = []
     arr.append(pixel[0] + 100)
     arr.append(0)
@@ -96,7 +96,7 @@ def vaporwaveImage(path):
     for i in range(im.size[0]): # width
         for j in range(im.size[1]): # height
             curr = pixels[i, j]
-            pixels[i, j] = addFilter(pixels[i, j])
+            pixels[i, j] = addFilter(pixels[i, j], random.randint(30, 100), 0, random.randint(0, 30))
     terminalLine(u"ＶＡＰＯＲＷＡＶＥの画像する、待ってをください…")
     im = addImg(im)
     terminalLine(u"今、ＶＡＰＯＲＷＡＶＥのミームの文章する。待ってをください…")
@@ -109,7 +109,7 @@ def vaporwaveImage(path):
 
 
 def main():
-    fp = "mem.jpg"
+    fp = "mem3.jpg"
     vaporwaveImage(fp)
 
 if __name__ == "__main__":
