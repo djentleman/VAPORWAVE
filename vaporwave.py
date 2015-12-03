@@ -43,7 +43,7 @@ def getmemeword():
         u"ミーム",
         ]
     return memewords[random.randint(0, len(memewords)-1)]
-    
+
 
 def addFilter(pixel, r, g, b):
     arr = []
@@ -51,6 +51,19 @@ def addFilter(pixel, r, g, b):
     arr.append(0)
     arr.append(pixel[0] + 20)
     return tuple(arr)
+
+def addBckgrndOverlay(im):
+    # Get a random background image
+    overlayImage = Image.open(getRandomImgFromPath("backgrounds"))
+    # Convert it to RGB for compatibility
+    overlayImage = overlayImage.convert('RGB')
+    # Resize the image to be the same size as im, needed for Image.blend
+    overlayImage = overlayImage.resize(im.size)
+
+    # Blend the images together
+    im = Image.blend(im, overlayImage, 0.5)
+
+    return im
 
 def drawMemeText(size, text, x, y, im):
     draw = ImageDraw.Draw(im)
@@ -61,7 +74,7 @@ def drawMemeText(size, text, x, y, im):
     draw.text((x+3, y+3),text, (r/2,g/2,b/2),font=font)
     draw.text((x, y),text,(r,g,b),font=font)
     return im
-    
+
 def addText(im):
     for i in range(random.randint(2, 10)):
         im = drawMemeText(random.randint(10, 100), getmemeword(),
@@ -79,12 +92,22 @@ def overlayImage(im, path):
     foreground = resize(foreground, random.randint(1, 3))
     im.paste(foreground, (random.randint(0, im.size[0]), random.randint(0, im.size[1])), mask=foreground)
     return im
-                   
+
 def addImg(im):
     for i in range(random.randint(3, 10)):
-        newImgPath = "img/" + os.listdir("img")[random.randint(0, len(os.listdir("img"))-1)]
+        newImgPath = getRandomImgFromPath("img")
         im = overlayImage(im, newImgPath)
     return im
+
+def getRandomImgFromPath(path):
+    if not os.path.isdir(path):
+        return
+
+    if not path.endswith("/"):
+        path += "/"
+
+    return path + random.choice(os.listdir(path))
+
 
 def vaporwaveImage(path):
     terminalLine(u"ミームマシンをイニシャライズする…")
@@ -93,23 +116,26 @@ def vaporwaveImage(path):
     pixels = im.load()
     terminalLine(u"ミームマシンを実行してる…")
     terminalLine(u"ＳＴＯＩＣのフィルターをやっています。待ってをください…")
-    for i in range(im.size[0]): # width
+
+    # You can put this part back in if you want
+    """for i in range(im.size[0]): # width
         for j in range(im.size[1]): # height
             curr = pixels[i, j]
-            pixels[i, j] = addFilter(pixels[i, j], random.randint(30, 100), 0, random.randint(0, 30))
+            pixels[i, j] = addFilter(pixels[i, j], random.randint(30, 100), 0, random.randint(0, 30))"""
     terminalLine(u"ＶＡＰＯＲＷＡＶＥの画像する、待ってをください…")
+    im = addBckgrndOverlay(im)
     im = addImg(im)
     terminalLine(u"今、ＶＡＰＯＲＷＡＶＥのミームの文章する。待ってをください…")
     im = addText(im)
     im.show()
-    
-    
-    
-    
+
+
+
+
 
 
 def main():
-    fp = "mem3.jpg"
+    fp = "mem2.jpg"
     vaporwaveImage(fp)
 
 if __name__ == "__main__":
