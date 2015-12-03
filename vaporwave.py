@@ -2,6 +2,7 @@
 # vaporwavor
 
 from PIL import Image
+import PIL
 import time
 import sys
 import random
@@ -36,15 +37,19 @@ def getmemeword():
         u"神様の思考を聞けます",
         u"１９８ＸＡＤミーム",
         u"像",
+        u"愛",
+        u"死",
+        u"ミームは生活より大切",
+        u"ミーム",
         ]
     return memewords[random.randint(0, len(memewords)-1)]
     
 
 def addFilter(pixel):
     arr = []
-    for i in range(3):
-        arr.append(pixel[i] + random.randint(75, 255))
-        if arr[i] > 255: arr[i] = 255
+    arr.append(pixel[0] + 100)
+    arr.append(0)
+    arr.append(pixel[0] + 20)
     return tuple(arr)
 
 def drawMemeText(size, text, x, y, im):
@@ -58,20 +63,25 @@ def drawMemeText(size, text, x, y, im):
     return im
     
 def addText(im):
-    for i in range(random.randint(15, 30)):
+    for i in range(random.randint(2, 10)):
         im = drawMemeText(random.randint(10, 100), getmemeword(),
                      random.randint(0, im.size[0]), random.randint(0, im.size[1]),
                      im)
     return im
 
+def resize(im, factor):
+    im = im.resize((int(im.size[0]/factor),int(im.size[1]/factor)))
+    return im
+
 def overlayImage(im, path):
     foreground = Image.open(path)
     foreground = foreground.convert('RGBA')
+    foreground = resize(foreground, random.randint(1, 3))
     im.paste(foreground, (random.randint(0, im.size[0]), random.randint(0, im.size[1])), mask=foreground)
     return im
                    
 def addImg(im):
-    for i in range(random.randint(4, 10)):
+    for i in range(random.randint(3, 10)):
         newImgPath = "img/" + os.listdir("img")[random.randint(0, len(os.listdir("img"))-1)]
         im = overlayImage(im, newImgPath)
     return im
