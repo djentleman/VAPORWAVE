@@ -41,6 +41,11 @@ def getmemeword():
         u"死",
         u"ミームは生活より大切",
         u"ミーム",
+        u"私はコードです",
+        u"俺はあなたを忘れた",
+        u"私を助けて",
+        u"神",
+        
         ]
     return memewords[random.randint(0, len(memewords)-1)]
 
@@ -76,7 +81,7 @@ def drawMemeText(size, text, x, y, im):
     return im
 
 def addText(im):
-    for i in range(random.randint(2, 10)):
+    for i in range(random.randint(4, 10)):
         im = drawMemeText(random.randint(10, 100), getmemeword(),
                      random.randint(0, im.size[0]), random.randint(0, im.size[1]),
                      im)
@@ -135,7 +140,7 @@ def vaporwaveImage(path):
 
 
 def main():
-    fp = "mem2.jpg"
+    fp = "mem5.jpg"
     vaporwaveImage(fp)
 
 if __name__ == "__main__":
