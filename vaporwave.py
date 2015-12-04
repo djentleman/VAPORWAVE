@@ -45,7 +45,7 @@ def getmemeword():
         u"俺はあなたを忘れた",
         u"私を助けて",
         u"神",
-        
+        u"お前の頭の中ですべてです",
         ]
     return memewords[random.randint(0, len(memewords)-1)]
 
@@ -140,7 +140,7 @@ def vaporwaveImage(path):
 
 
 def main():
-    fp = "mem5.jpg"
+    fp = "mem.jpg"
     vaporwaveImage(fp)
 
 if __name__ == "__main__":
