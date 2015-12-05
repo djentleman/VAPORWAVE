@@ -80,8 +80,8 @@ def drawMemeText(size, text, x, y, im):
     draw.text((x, y),text,(r,g,b),font=font)
     return im
 
-def addText(im):
-    for i in range(random.randint(4, 10)):
+def addText(im, textbounds):
+    for i in range(random.randint(textbounds[0], textbounds[1])):
         im = drawMemeText(random.randint(10, 100), getmemeword(),
                      random.randint(0, im.size[0]), random.randint(0, im.size[1]),
                      im)
@@ -98,8 +98,8 @@ def overlayImage(im, path):
     im.paste(foreground, (random.randint(0, im.size[0]), random.randint(0, im.size[1])), mask=foreground)
     return im
 
-def addImg(im):
-    for i in range(random.randint(3, 10)):
+def addImg(im, imgbounds):
+    for i in range(random.randint(imgbounds[0], imgbounds[1])):
         newImgPath = getRandomImgFromPath("img")
         im = overlayImage(im, newImgPath)
     return im
@@ -114,7 +114,9 @@ def getRandomImgFromPath(path):
     return path + random.choice(os.listdir(path))
 
 
-def vaporwaveImage(path):
+def vaporwaveImage(path, outpath, imgbounds, textbounds):
+    # imgbounds = [lower, upper] bounds of number of images
+    # textbounds = [lower, upper] bounds up number of text
     terminalLine(u"ミームマシンをイニシャライズする…")
     im = Image.open(path)
     im = im.convert('RGB')
@@ -129,10 +131,13 @@ def vaporwaveImage(path):
             pixels[i, j] = addFilter(pixels[i, j], random.randint(30, 100), 0, random.randint(0, 30))"""
     terminalLine(u"ＶＡＰＯＲＷＡＶＥの画像する、待ってをください…")
     im = addBckgrndOverlay(im)
-    im = addImg(im)
+    im = addImg(im, imgbounds)
     terminalLine(u"今、ＶＡＰＯＲＷＡＶＥのミームの文章する。待ってをください…")
-    im = addText(im)
-    im.show()
+    im = addText(im, textbounds)
+    terminalLine(u"お前は新しい画像をセーブしてる、待ってをください…")
+    im.save(outpath, "JPEG", quality=80, optimize=True, progressive=True)
+    terminalLine(u"ＶＡＰＯＲＷＡＶＥ　ＡＥＳＴＨＥＴＩＣ　ＧＥＮＥＲＡＴＴＯＲがプロセッシングを終わった")
+    
 
 
 
@@ -140,8 +145,9 @@ def vaporwaveImage(path):
 
 
 def main():
-    fp = "mem.jpg"
-    vaporwaveImage(fp)
+    fp = "farage.jpeg"
+    out = "out.jpeg"
+    vaporwaveImage(fp, out, [1000, 2000], [2, 4])
 
 if __name__ == "__main__":
     main()
